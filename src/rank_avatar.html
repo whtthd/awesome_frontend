@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人物头像</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #FFFFFF;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .avatar-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            width: fit-content;
+        }
+
+        .avatar-container {
+            position: relative;
+            --avatar-size: 72px;
+            --glow-color: #FCBF0B;
+            --glow-color-40: rgba(252, 191, 11, 0.4);
+            --glow-color-80: rgba(252, 191, 11, 0.8);
+            width: var(--avatar-size);
+            height: var(--avatar-size);
+        }
+
+        .avatar-bg {
+            position: absolute;
+            left: -3px;
+            top: -3px;
+            width: calc(var(--avatar-size) + 6px);
+            height: calc(var(--avatar-size) + 6px);
+            border-radius: 50%;
+            border: var(--glow-color-80) 3px solid;
+            background: linear-gradient(135deg, #fff, #eee);
+            box-shadow: 0px 1px 1px var(--glow-color-40), 0px 1px 4px var(--glow-color-80), 0px 0px 8px var(--glow-color);
+            animation: pulse-glow 2s infinite alternate ease-in-out;
+        }
+
+        .avatar-border {
+            position: absolute;
+            left: -1px;
+            top: -1px;
+            width: calc(var(--avatar-size) + 2px);
+            height: calc(var(--avatar-size) + 2px);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-sizing: border-box;
+        }
+
+        .avatar-image {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: var(--avatar-size);
+            height: var(--avatar-size);
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+
+        .avatar-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .avatar-spinner {
+            position: absolute;
+            left: -3px;
+            top: -3px;
+            width: calc(var(--avatar-size) + 6px);
+            height: calc(var(--avatar-size) + 6px);
+            border-radius: 50%;
+            mix-blend-mode: overlay;
+            background: conic-gradient(
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                var(--glow-color),
+                rgba(255, 255, 255, 0.8),
+                transparent 40%);
+            animation: rotate-glow 2s linear infinite;
+        }
+
+        .avatar-highlight {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: var(--avatar-size);
+            height: var(--avatar-size);
+            border-radius: 50%;
+            overflow: hidden;
+            pointer-events: none;
+            transform: rotate(315deg);
+        }
+
+        .highlight-effect {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: var(--avatar-size);
+            height: var(--avatar-size);
+            mix-blend-mode: overlay;
+            opacity: 0.75;
+            transform: translate(0%, -100%) rotate(0deg);
+            background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0) 9%,
+                rgba(255, 255, 255, 0.9) 12%,
+                rgba(255, 255, 255, 0.95) 15%,
+                rgba(255, 255, 255, 0.9) 18%,
+                rgba(255, 255, 255, 0) 21%
+            ),
+            linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0) 40%,
+                rgba(255, 255, 255, 0.9) 50%,
+                rgba(255, 255, 255, 0.95) 65%,
+                rgba(255, 255, 255, 0.9) 80%,
+                rgba(255, 255, 255, 0) 90%
+            );
+            animation: glass-shine 5s infinite;
+        }
+
+        @keyframes rotate-glow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes glass-shine {
+            0% { transform: translate(0%, -100%) rotate(0deg); }
+            20%, 100% { transform: translate(0%, 100%) rotate(0deg); }
+        }
+
+        @keyframes pulse-glow {
+            from { opacity: 0.5; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1.05); }
+        }
+
+        .ranking-icon {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ranking-crown {
+            width: 24px;
+            height: 18px;
+            position: relative;
+        }
+
+        .user-name {
+            font-size: 14px;
+            color: #242424;
+            text-align: center;
+            white-space: nowrap;
+            font-weight: 400;
+            line-height: normal;
+        }
+
+        /* 示例头像样式 */
+        .demo-avatar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="avatar-card">
+        <div class="avatar-container">
+            <!-- 背景圆环 -->
+            <div class="avatar-bg"></div>
+            
+            <!-- 边框 -->
+            <div class="avatar-border"></div>
+
+            <!-- 旋转流光层 -->
+            <div class="avatar-spinner"></div>
+            
+            <!-- 头像图片区域 -->
+            <div class="avatar-image">
+                <!-- 这里可以放实际的头像图片 -->
+                <img src="https://hais-teatime.com/leijun/images/img2.jpg" alt="雷军">
+                <!-- 临时演示用的头像 -->
+                <!-- <div class="demo-avatar">雷</div> -->
+            </div>
+            
+            <!-- 高光效果 -->
+            <div class="avatar-highlight">
+                <div class="highlight-effect"></div>
+            </div>
+            
+            <!-- 排名图标 -->
+            <div class="ranking-icon">
+                <div class="ranking-crown">
+                    <img src="assets/rank_1.png" alt="排名图标" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+        
+        <!-- 用户名 -->
+        <div class="user-name">雷军</div>
+    </div>
+</body>
+</html>
